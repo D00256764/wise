@@ -1,0 +1,70 @@
+require("dotenv").config();
+const express = require("express")
+const mongoose = require("mongoose")
+const cors = require("cors")
+const bcrypt = require('bcryptjs')
+const UserModel = require("./models/User")
+
+const app = express()
+app.use(express.json())
+app.use(cors())
+
+mongoose.connect(process.env.MONGODB_URI)
+  .then(() => console.log("✅ Connected to MongoDB via VS Code string!"))
+  .catch(err => console.error("❌ Connection error:", err));
+
+app.post("/login", async (req, res) => {
+    try {
+        const { email, password } = req.body;
+        if (!email || !password) return res.status(400).json({ message: 'Email and password are required' });
+
+        const user = await UserModel.findOne({ email });
+        if (!user) return res.status(400).json({ message: 'No account with that email' });
+
+        const match = await bcrypt.compare(password, user.password);
+        if (!match) return res.status(400).json({ message: 'The password is incorrect' });
+
+        // Successful login — return safe user info
+        return res.json({ message: 'Success', user: { name: user.name, email: user.email } });
+    } catch (err) {
+        console.error('Login error', err);
+        return res.status(500).json({ message: 'Server error during login' });
+    }
+});
+
+app.post("/register", async (req, res) => {
+    try {
+        const { name, email, password } = req.body;
+        if (!name || !email || !password) return res.status(400).json({ message: 'Name, email and password are required' });
+
+        // Check for existing user
+        const existing = await UserModel.findOne({ email });
+        if (existing) return res.status(400).json({ message: 'An account with that email already exists' });
+
+        const salt = await bcrypt.genSalt(10);
+        const hash = await bcrypt.hash(password, salt);
+
+        const created = await UserModel.create({ name, email, password: hash });
+        // Return created user (safe fields only)
+        return res.status(201).json({ message: 'Registered', user: { name: created.name, email: created.email } });
+    } catch (err) {
+        console.error('Register error', err);
+        return res.status(500).json({ message: 'Server error during registration' });
+    }
+});
+
+app.get("/user-stats/:id", (req, res) => {
+    res.json({
+        lessonsCompleted: 5,
+        points: 1250,
+        progressData: [
+            { date: 'Jan 1', lessonsCompleted: 1 },
+            { date: 'Jan 5', lessonsCompleted: 3 },
+            { date: 'Jan 10', lessonsCompleted: 5 },
+        ]
+    });
+});
+
+app.listen(3001, () => {
+    console.log("server is running")
+});
