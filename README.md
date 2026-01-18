@@ -37,14 +37,18 @@ This application follows the MERN Stack Architecture (MongoDB, Express, React, N
 ### Feature 1: User Authentication System
 
 Registration with email validation and password strength requirements:
+
 <img width="402" height="382" alt="Screenshot 2026-01-18 at 21 38 15" src="https://github.com/user-attachments/assets/ad987f39-5bbf-4979-a581-3db6f2b41cf6" />
 
 Logout functionality clearing tokens and session data:
+
 <img width="422" height="338" alt="Screenshot 2026-01-18 at 21 38 33" src="https://github.com/user-attachments/assets/7e26e0b8-6264-4a83-8d0f-934fc9378e23" />
 
 
 ### Feature 2: Financial Lessons Module
+
 <img width="502" height="647" alt="Screenshot 2026-01-18 at 21 41 09" src="https://github.com/user-attachments/assets/b5895c64-3a07-4a41-9118-aaf9d30a6756" />
+
 3 lessons organized into categories (Budgeting, Saving, Credit)
 Embedded YouTube video players for multimedia content
 Progress tracking marking lessons as complete
@@ -52,15 +56,19 @@ Progress tracking marking lessons as complete
 ### Feature 3: Interactive Quiz System
 
 Multiple-choice questions (2-3 per lesson): 
+
 <img width="503" height="499" alt="Screenshot 2026-01-18 at 21 41 41" src="https://github.com/user-attachments/assets/79262163-796c-4937-abd5-2bdf6339aa62" />
 
 Real-time answer selection with instant feedback
 Immediate scoring upon submission:
+
 <img width="232" height="205" alt="Screenshot 2026-01-18 at 21 41 58" src="https://github.com/user-attachments/assets/9653ded2-f312-423f-b16e-8a25537fc8db" />
+
 Answer validation against correct answers stored in database
 Quiz history tracking for progress monitoring
 
 ### Feature 4: Budget Calculator
+
 <img width="377" height="660" alt="Screenshot 2026-01-18 at 21 43 33" src="https://github.com/user-attachments/assets/966213e3-37de-4a90-8380-8cf3dd168aa3" />
 
 Input fields for monthly income 
@@ -68,13 +76,12 @@ Expense categories: Rent, Food, Transport, Utilities, Entertainment, Savings
 Real-time calculation of total expenses and remaining balance
 
 ### Feature 5: User Dashboard
+
 <img width="526" height="627" alt="Screenshot 2026-01-18 at 21 39 10" src="https://github.com/user-attachments/assets/c6415005-cd16-4ba2-af5b-eb44bcb10ed3" />
 
 Personalized greeting with user's name
 Progress statistics: lessons completed (X/3), quiz average (%)
 Quick navigation to continue learning or start new lessons
-
-
 
 ## Code Quality & Standards
 
