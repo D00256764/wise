@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "postinstall": "if [ -f ../client/package.json ]; then cd ../client && npm install --include=dev && npm run build; else echo \"No client package.json found, skipping client build\"; fi",
+  "postinstall": "if [ -f ../client/package.json ]; then cd ../client && npm install --include=dev && npm run build; elif [ -d ../client/.git ]; then echo \"Client appears to be a git submodule — initializing submodule and attempting build\" && git submodule update --init --recursive ../client && if [ -f ../client/package.json ]; then cd ../client && npm install --include=dev && npm run build; else echo \"client package.json missing after submodule init, skipping client build\"; fi; else echo \"No client package.json found, skipping client build\"; fi",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
