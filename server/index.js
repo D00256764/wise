@@ -92,7 +92,8 @@ if (fs.existsSync(clientDist)) {
     app.use(express.static(clientDist));
 
     // Return index.html for any unmatched route (client-side routing)
-    app.get('*', (req, res) => {
+    // Use '/*' instead of '*' to avoid path-to-regexp errors in newer Express/path-to-regexp versions
+    app.get('/*', (req, res) => {
         res.sendFile(path.join(clientDist, 'index.html'));
     });
 } else {
