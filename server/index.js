@@ -88,7 +88,18 @@ const path = require('path');
 const clientDist = path.join(__dirname, '..', 'client', 'dist');
 
 const fs = require('fs');
+// Logging to help debug deploys where client build may be missing
+console.log('Server __dirname:', __dirname);
+console.log('Expected client dist path:', clientDist);
 if (fs.existsSync(clientDist)) {
+    console.log('Client build found — serving static files from', clientDist);
+    try {
+        const files = fs.readdirSync(clientDist);
+        console.log('Client dist contents:', files);
+    } catch (err) {
+        console.error('Failed to read client dist contents', err);
+    }
+
     app.use(express.static(clientDist));
 
     // Return index.html for any unmatched route (client-side routing)
@@ -96,6 +107,7 @@ if (fs.existsSync(clientDist)) {
         res.sendFile(path.join(clientDist, 'index.html'));
     });
 } else {
+    console.log('No client build found at', clientDist);
     // If no client build is present, provide a helpful root message
     app.get('/', (req, res) => {
         res.send('API is running. No client build found.');
