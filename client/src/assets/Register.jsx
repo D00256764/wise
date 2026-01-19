@@ -17,8 +17,9 @@ function Register() {
         console.log('Register form submitted', { name, email });
         setLoading(true);
         
+        // Use relative path so the client talks to the same origin in production
         axios
-            .post("http://localhost:3001/register", { name, email, password })
+            .post("/register", { name, email, password })
             .then((response) => {
                 console.log('Register response:', response.data);
                 if (response?.data?.message === "Registered") {

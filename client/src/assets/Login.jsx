@@ -17,7 +17,8 @@ function Login() {
         console.log('Login form submitted', { email });
         setLoading(true);
         
-        axios.post('http://localhost:3001/login', { email, password })
+    // Use relative path so the client talks to the same origin in production
+    axios.post('/login', { email, password })
             .then((response) => {
                 console.log('Login response:', response.data);
                 if (response?.data?.message === "Success") {
