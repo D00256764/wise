@@ -9,9 +9,27 @@ const app = express()
 app.use(express.json())
 app.use(cors())
 
-mongoose.connect(process.env.MONGODB_URI)
-  .then(() => console.log("✅ Connected to MongoDB via VS Code string!"))
-  .catch(err => console.error("❌ Connection error:", err));
+const mongoUri = process.env.MONGODB_URI;
+if (!mongoUri) {
+    console.error('❌ MONGODB_URI is not defined. Please set it in your environment.');
+} else {
+    mongoose.connect(mongoUri, {
+        // recommended options; current mongoose versions set sensible defaults but
+        // explicit options make intent clear and can help some environments
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+        // short server selection timeout so failures surface quickly during deploy
+        serverSelectionTimeoutMS: 10000,
+    })
+        .then(() => console.log('✅ Connected to MongoDB'))
+        .catch(err => {
+            console.error('❌ Connection error:', err);
+        });
+
+    mongoose.connection.on('error', err => {
+        console.error('MongoDB connection error (event):', err);
+    });
+}
 
 app.post("/login", async (req, res) => {
     try {
@@ -65,6 +83,26 @@ app.get("/user-stats/:id", (req, res) => {
     });
 });
 
-app.listen(3001, () => {
-    console.log("server is running")
+const PORT = process.env.PORT || 3001;
+app.listen(PORT, () => {
+    console.log(`server is running on port ${PORT}`);
 });
+
+// Serve client static files when deployed (assumes Vite build output at ../client/dist)
+const path = require('path');
+const clientDist = path.join(__dirname, '..', 'client', 'dist');
+
+const fs = require('fs');
+if (fs.existsSync(clientDist)) {
+    app.use(express.static(clientDist));
+
+    // Return index.html for any unmatched route (client-side routing)
+    app.get('*', (req, res) => {
+        res.sendFile(path.join(clientDist, 'index.html'));
+    });
+} else {
+    // If no client build is present, provide a helpful root message
+    app.get('/', (req, res) => {
+        res.send('API is running. No client build found.');
+    });
+}
