@@ -14,11 +14,6 @@ if (!mongoUri) {
     console.error('❌ MONGODB_URI is not defined. Please set it in your environment.');
 } else {
     mongoose.connect(mongoUri, {
-        // recommended options; current mongoose versions set sensible defaults but
-        // explicit options make intent clear and can help some environments
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-        // short server selection timeout so failures surface quickly during deploy
         serverSelectionTimeoutMS: 10000,
     })
         .then(() => console.log('✅ Connected to MongoDB'))
